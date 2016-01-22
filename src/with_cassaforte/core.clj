@@ -1,6 +1,7 @@
 (ns with-cassaforte.core
   (:require [clojurewerkz.cassaforte.client :as client]
-            [clojurewerkz.cassaforte.cql :as cql]))
+            [clojurewerkz.cassaforte.cql :as cql]
+            [clojurewerkz.cassaforte.query :as query]))
 
 (def ^:dynamic *conn* nil)
 
@@ -33,5 +34,15 @@
   (apply cql/create-table (cons *conn* query-params)))
 (defn alter-table [& query-params]
   (apply cql/alter-table (cons *conn* query-params)))
+(defn drop-table [table]
+  (cql/drop-table *conn* table))
 (defn use-keyspace [keyspace]
   (cql/use-keyspace *conn* keyspace))
+
+
+(defn describe-tables
+  [keyspace]
+  (select 
+   (query/columns :columnfamily_name)
+   (query/from :system :schema_columnfamilies)
+   (query/where {:keyspace_name keyspace})))
