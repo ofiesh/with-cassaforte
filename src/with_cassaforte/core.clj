@@ -5,13 +5,14 @@
 
 (def ^:dynamic *conn* nil)
 
-(defn get-conn [host keyspace]
-  (client/connect [host] {:keyspace keyspace}))
+(defn get-conn [host keyspace port]
+  (client/connect [host] {:keyspace keyspace
+                          :port (nil? port) 9042 port}))
 
 (defmacro with-connection
   [host  & forms]
   `(with-bindings {#'*conn*
-                   (~get-conn ~(:host host) ~(:keyspace host))}
+                   (~get-conn ~(:host host) ~(:keyspace host) ~(:port port))}
      (do ~@forms)))
 
 (defn select [& query-params]
