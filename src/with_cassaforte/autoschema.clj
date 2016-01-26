@@ -50,19 +50,3 @@
       (if (some #{(:name table)} (:add table-transactions))
         (create-table (str keyspace "." (name (:name table))) (column-definitions (:column-definitions table)))
         (modify-table keyspace table)))))
-
-
-(with-connection {:host "10.1.1.2"}
-  (autoschema "foo"
-              {:name :test
-               :column-definitions
-               {:name :text
-                :abc :timeuuid
-                :x :text
-                :primary-key [:name]}}
-              {:name "foobar"
-               :column-definitions
-               {:id :timeuuid
-                :other_id :timeuuid
-                :foobar :blob
-                :primary-key [[:id] :other_id]}}))

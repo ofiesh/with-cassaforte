@@ -12,7 +12,7 @@
 (defmacro with-connection
   [host  & forms]
   `(with-bindings {#'*conn*
-                   (~get-conn ~(:host host) ~(:keyspace host) ~(:port port))}
+                   (~get-conn ~(:host host) ~(:keyspace host) ~(:port host))}
      (do ~@forms)))
 
 (defn select [& query-params]
