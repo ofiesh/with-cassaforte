@@ -7,7 +7,7 @@
 
 (defn get-conn [host keyspace port]
   (client/connect [host] {:keyspace keyspace
-                          :port (nil? port) 9042 port}))
+                          :port (if (nil? port) 9042 port)}))
 
 (defmacro with-connection
   [host  & forms]
@@ -37,6 +37,8 @@
   (apply cql/alter-table (cons *conn* query-params)))
 (defn drop-table [table]
   (cql/drop-table *conn* table))
+(defn drop-keyspace [keyspace]
+  (cql/drop-keyspace *conn* keyspace))
 (defn use-keyspace [keyspace]
   (cql/use-keyspace *conn* keyspace))
 
